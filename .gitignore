@@ -1,0 +1,38 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+pgdata/
+engine/block_planning.db
+engine/*.db
+engine/*.db-wal
+engine/*.db-shm
+engine/*.db-journal
+engine/optimized_schedule.csv
+engine/optimized_schedule.VER-*.csv
+engine/.schedule_*.tmp
+engine/*.log
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Go
+backend/bin/
+backend/tmp/
+backend/*.exe
+backend/server
+server
+*.exe
+
+# Scratch / Local
+.freebuff/
+ARCHITECTURE.pdf
+*~
+~$*

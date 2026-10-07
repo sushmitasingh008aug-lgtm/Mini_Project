@@ -1,0 +1,86 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: block_planning_db
+    restart: unless-stopped
+    command: >
+      postgres
+      -c fsync=on
+      -c synchronous_commit=on
+      -c full_page_writes=on
+      -c wal_compression=on
+      -c checkpoint_timeout=15min
+      -c wal_level=replica
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-block_planning}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgrespassword}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-block_planning}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - rl-net
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    stop_grace_period: 30s
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-/api}
+    container_name: block_planning_app
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+      - "${PYTHON_PORT:-8765}:8765"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgrespassword}@postgres:5432/${POSTGRES_DB:-block_planning}?sslmode=disable
+      POSTGRES_URI: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgrespassword}@postgres:5432/${POSTGRES_DB:-block_planning}?sslmode=disable
+      PORT: ${PORT:-3000}
+      PYTHON_PORT: ${PYTHON_PORT:-8765}
+      HORIZON_DAYS: ${HORIZON_DAYS:-7}
+      PYTHON_BIN: python3
+      PYTHONUNBUFFERED: 1
+      PYTHONPATH: /app:/app/engine:/app/backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:$${PORT:-3000}/api/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - rl-net
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    stop_grace_period: 30s
+
+volumes:
+  pgdata:
+    name: rl_pgdata
+
+networks:
+  rl-net:
+    name: rl-net
+    driver: bridge

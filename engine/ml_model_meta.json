@@ -1,0 +1,126 @@
+{
+  "model_version": "v4.0-12k",
+  "dataset_version": "v4.0-12k-diversified",
+  "timestamp": "2026-09-17 22:11:01",
+  "target_variable": "future_critical_event_30d",
+  "training_samples": 15000,
+  "positive_samples": 3137,
+  "positive_rate": 0.2091,
+  "temporal_split": {
+    "train_pct": 65,
+    "val_pct": 20,
+    "test_pct": 15
+  },
+  "promotion_gate": {
+    "status": "WITHHELD",
+    "passed": false,
+    "threshold_pr_auc": 0.4,
+    "best_candidate": "Logistic Regression",
+    "best_pr_auc": 0.3138,
+    "reason": "Candidate PR-AUC (0.3138) or positive support (3137) below statutory threshold (min PR-AUC: 0.4, min positives: 50). Preserved baseline champion model to prevent production degradation."
+  },
+  "calibration": {
+    "is_calibrated": false,
+    "method": "isotonic",
+    "expected_calibration_error": 0.0,
+    "calibrated_brier_score": 0.0,
+    "reliability_curve": []
+  },
+  "champion_model": "XGBoost (Champion v2.4 Baseline)",
+  "benchmark_metrics": [
+    {
+      "model_name": "Logistic Regression",
+      "pr_auc": 0.3138,
+      "roc_auc": 0.6293,
+      "f1_score": 0.0124,
+      "recall": 0.0063,
+      "precision": 0.5,
+      "brier_score": 0.1606,
+      "training_time_s": 0.131,
+      "inference_latency_ms": 0.0
+    },
+    {
+      "model_name": "Decision Tree",
+      "pr_auc": 0.2564,
+      "roc_auc": 0.5915,
+      "f1_score": 0.0344,
+      "recall": 0.0189,
+      "precision": 0.1915,
+      "brier_score": 0.17,
+      "training_time_s": 0.02,
+      "inference_latency_ms": 0.0
+    },
+    {
+      "model_name": "Random Forest",
+      "pr_auc": 0.3007,
+      "roc_auc": 0.6234,
+      "f1_score": 0.0,
+      "recall": 0.0,
+      "precision": 0.0,
+      "brier_score": 0.1614,
+      "training_time_s": 0.175,
+      "inference_latency_ms": 0.0117
+    },
+    {
+      "model_name": "Extra Trees",
+      "pr_auc": 0.3072,
+      "roc_auc": 0.622,
+      "f1_score": 0.0,
+      "recall": 0.0,
+      "precision": 0.0,
+      "brier_score": 0.162,
+      "training_time_s": 0.113,
+      "inference_latency_ms": 0.0117
+    },
+    {
+      "model_name": "HistGradientBoosting",
+      "pr_auc": 0.2829,
+      "roc_auc": 0.5936,
+      "f1_score": 0.0399,
+      "recall": 0.021,
+      "precision": 0.4,
+      "brier_score": 0.1655,
+      "training_time_s": 1.636,
+      "inference_latency_ms": 0.004
+    },
+    {
+      "model_name": "XGBoost (Tuned)",
+      "pr_auc": 0.284,
+      "roc_auc": 0.6056,
+      "f1_score": 0.0281,
+      "recall": 0.0147,
+      "precision": 0.3043,
+      "brier_score": 0.1646,
+      "training_time_s": 0.303,
+      "inference_latency_ms": 0.0013
+    }
+  ],
+  "feature_names": [
+    "condition_score",
+    "health_index",
+    "asset_age_years",
+    "asset_importance",
+    "duration_minutes",
+    "defects_30d",
+    "days_overdue",
+    "dept_S&T",
+    "dept_TRD",
+    "task_Corrective Maintenance",
+    "task_Drainage Cleaning",
+    "task_Emergency Repair",
+    "task_Failure Rectification",
+    "task_Inspection",
+    "task_Isolation Test",
+    "task_Joint Inspection",
+    "task_Overhaul",
+    "task_Patrolling Follow-up",
+    "task_Preventive Maintenance",
+    "task_RUL Check",
+    "task_Renewal",
+    "task_Security Repair",
+    "task_Spot Replacement",
+    "task_Tamping/Grinding",
+    "task_Testing",
+    "task_Vegetation Clearance"
+  ]
+}
